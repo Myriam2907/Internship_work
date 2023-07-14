@@ -6,14 +6,19 @@ const ComplaintList = () => {
     const [complaints, setComplaints] = useState([
         {
             id: 1,
-            time: '2023-07-09 10:30',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            ClientName: 'Myriam Ladhari',
+            ProjectName: 'Gigi',
+            ComplaintType : 'huh',
+            ComplaintDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         },
         {
             id: 2,
-            time: '2023-07-08 14:15',
-            description: 'Pellentesque ac nisi vel augue tincidunt condimentum.',
+            ClientName: 'Sacha',
+            ProjectName: 'loli',
+            ComplaintType : 'gui',
+            ComplaintDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         },
+
         // Add more complaints as needed
     ]);
 
@@ -47,14 +52,19 @@ const ComplaintList = () => {
     };
 
     const handleEdit = (id) => {
-        // Handle edit action for the complaint with the given ID
-        console.log(`Edit complaint ${id}`);
+        console.log(`Editing complaint with ID: ${id}`);
+        // Add your edit logic here
     };
 
+
     const handleRemove = (id) => {
-        // Handle remove action for the complaint with the given ID
-        console.log(`Remove complaint ${id}`);
+        // Create a new array without the complaint with the given id
+        const updatedComplaints = complaints.filter((complaint) => complaint.id !== id);
+
+        // Update the data source with the updated array of complaints
+        setComplaints(updatedComplaints);
     };
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -67,13 +77,15 @@ const ComplaintList = () => {
     return (
         <div className="complaint-list-container">
             <h2>Complaint List</h2>
-            <div>
+            <div className="add-button-container">
                 <Button color="danger" onClick={toggle}>
-                    Ajouter
+                    ADD Complaint
                 </Button>
-                <Modal isOpen={modal} toggle={toggle}>
-                    <ModalHeader toggle={toggle}>Ajouter Reclamation</ModalHeader>
-                    <ModalBody>
+                <Modal isOpen={modal} toggle={toggle}  className="modal-container">
+                    <ModalHeader toggle={toggle} className="modal-header">
+                        Ajouter Reclamation
+                    </ModalHeader>
+                    <ModalBody className="modal-body">
                         <form onSubmit={handleSubmit}>
                             <div>
                                 <label htmlFor="clientName">Client Name:</label>
@@ -116,7 +128,7 @@ const ComplaintList = () => {
                             </div>
                         </form>
                     </ModalBody>
-                    <ModalFooter>
+                    <ModalFooter className="modal-footer">
                         <Button color="primary" onClick={handleSubmit}>
                             Ajouter
                         </Button>{' '}
@@ -126,12 +138,16 @@ const ComplaintList = () => {
                     </ModalFooter>
                 </Modal>
             </div>
-            <table className="complaint-table">
+
+
+    <table className="complaint-table">
                 <thead>
                 <tr>
                     <th>Complaint ID</th>
-                    <th>Complaint Time</th>
-                    <th>Description</th>
+                    <th>Client Name</th>
+                    <th>Project Name</th>
+                    <th>Complaint Type</th>
+                    <th>Complaint Description</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -139,11 +155,14 @@ const ComplaintList = () => {
                 {complaints.map((complaint) => (
                     <tr key={complaint.id}>
                         <td>{complaint.id}</td>
-                        <td>{complaint.time}</td>
-                        <td>{complaint.description}</td>
+                        <td>{complaint.ClientName}</td>
+                        <td>{complaint.ProjectName}</td>
+                        <td>{complaint.ComplaintType}</td>
+                        <td>{complaint.ComplaintDescription}</td>
                         <td>
-                            <button onClick={() => handleEdit(complaint.id)}>Edit</button>
-                            <button onClick={() => handleRemove(complaint.id)}>Remove</button>
+                            <button className="button button-primary" onClick={() => handleEdit(complaint.id)}>Edit</button>
+                            <button className="button button-danger" onClick={() => handleRemove(complaint.id)}>Remove</button>
+
                         </td>
                     </tr>
                 ))}
