@@ -7,18 +7,16 @@ const ClientList = () => {
         {
             id: 1,
             ClientName: 'Myriam Ladhari',
-            Email: 'Gigi',
-            PhoneNb : 'huh',
-
+            Email: 'maya@gmail.com',
+            PhoneNb: '90898776',
         },
         {
             id: 2,
-            ClientName: 'Sacha',
-            Email: 'loli',
-            PhoneNb : 'gui',
+            ClientName: 'Sacha Doti',
+            Email: 'sacha@gmail.com',
+            PhoneNb: '34245378',
         },
-
-        // Add more complaints as needed
+        // Add more clients as needed
     ]);
 
     const [modal, setModal] = useState(false);
@@ -32,7 +30,7 @@ const ClientList = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission and add new complaint
+        // Handle form submission and add new client
         const newClient = {
             id: Client.length + 1,
         };
@@ -50,15 +48,12 @@ const ClientList = () => {
         // Add your edit logic here
     };
 
-
     const handleRemove = (id) => {
-        // Create a new array without the complaint with the given id
-        const updatedClient = Client.filter((Client) => Client.id !== id);
-
-        // Update the data source with the updated array of complaints
+        // Create a new array without the client with the given id
+        const updatedClient = Client.filter((client) => client.id !== id);
+        // Update the data source with the updated array of clients
         setClient(updatedClient);
     };
-
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -70,12 +65,25 @@ const ClientList = () => {
 
     return (
         <div className="Client-list-container">
-            <h2>Client List</h2>
+            <h2>Clients List</h2>
             <div className="add-button-container">
-                <Button color="danger" onClick={toggle}>
-                    ADD Client
+                <Button
+                    onClick={toggle}
+                    style={{
+                        backgroundColor: '#00a19a',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '4px',
+                        padding: '10px 20px',
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.3s ease',
+                    }}
+                >
+                    Add Client
                 </Button>
-                <Modal isOpen={modal} toggle={toggle}  className="modal-container">
+                <Modal isOpen={modal} toggle={toggle} className="modal-container">
                     <ModalHeader toggle={toggle} className="modal-header">
                         Add Client
                     </ModalHeader>
@@ -94,23 +102,28 @@ const ClientList = () => {
                             <div>
                                 <label htmlFor="Email">Email:</label>
                                 <input
-                                    type="text"
+                                    type="email"
                                     id="Email"
                                     name="Email"
                                     value={formValues.Email}
                                     onChange={handleInputChange}
+                                    required
                                 />
                             </div>
                             <div>
                                 <label htmlFor="PhoneNb">PhoneNb :</label>
                                 <input
-                                    type="text"
+                                    type="tel"
                                     id="PhoneNb"
                                     name="PhoneNb"
-                                    value={formValues.ClientType}
+                                    pattern="[0-9]{8}"
+                                    title="Please enter an 8-digit number"
+                                    value={formValues.PhoneNb}
                                     onChange={handleInputChange}
+                                    required
                                 />
                             </div>
+
 
                         </form>
                     </ModalBody>
@@ -124,8 +137,6 @@ const ClientList = () => {
                     </ModalFooter>
                 </Modal>
             </div>
-
-
             <table className="Client-table">
                 <thead>
                 <tr>
@@ -137,16 +148,25 @@ const ClientList = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {Client.map((Client) => (
-                    <tr key={Client.id}>
-                        <td>{Client.id}</td>
-                        <td>{Client.ClientName}</td>
-                        <td>{Client.Email}</td>
-                        <td>{Client.PhoneNb}</td>
+                {Client.map((client) => (
+                    <tr key={client.id}>
+                        <td>{client.id}</td>
+                        <td>{client.ClientName}</td>
+                        <td>{client.Email}</td>
+                        <td>{client.PhoneNb}</td>
                         <td>
-                            <button className="button button-primary" onClick={() => handleEdit(Client.id)}>Edit</button>
-                            <button className="button button-danger" onClick={() => handleRemove(Client.id)}>Remove</button>
-
+                            <button
+                                className="button button-primary"
+                                onClick={() => handleEdit(client.id)}
+                            >
+                                Edit
+                            </button>
+                            <button
+                                className="button button-danger"
+                                onClick={() => handleRemove(client.id)}
+                            >
+                                Remove
+                            </button>
                         </td>
                     </tr>
                 ))}

@@ -78,8 +78,21 @@ const ComplaintList = () => {
         <div className="complaint-list-container">
             <h2>Complaint List</h2>
             <div className="add-button-container">
-                <Button color="danger" onClick={toggle}>
-                    ADD Complaint
+                <Button
+                    onClick={toggle}
+                    style={{
+                        backgroundColor: '#00a19a',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '4px',
+                        padding: '10px 20px',
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.3s ease',
+                    }}
+                >
+                    Add Complaint
                 </Button>
                 <Modal isOpen={modal} toggle={toggle}  className="modal-container">
                     <ModalHeader toggle={toggle} className="modal-header">

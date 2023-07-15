@@ -5,6 +5,7 @@ import SideBar from "./components/SideBar";
 import ClientList from "./components/Client";
 import InterventionList from "./components/Intervention";
 import ComplaintList from "./components/Complaint";
+import ProjectList from "./components/Project";
 import './App.css';
 
 const App = () => {
@@ -25,7 +26,9 @@ const App = () => {
     } else if (activeLink === "interventions") {
         contentComponent = <InterventionList />;
     } else if (activeLink === "complaints") {
-        contentComponent = <ComplaintList />;
+        contentComponent = <ComplaintList/>;
+    } else if (activeLink  === "projects"){
+        contentComponent = <ProjectList/>;
     }
 
     return (

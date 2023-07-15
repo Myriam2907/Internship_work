@@ -3,48 +3,44 @@ import './intervention.css';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const InterventionList = () => {
-    const [intervention, setIntervention] = useState([
+    const [interventions, setInterventions] = useState([
         {
             id: 1,
             ClientName: 'Myriam Ladhari',
             ProjectName: 'Gigi',
-            Date :'',
-
+            Date: '28/05/2023',
         },
         {
             id: 2,
-            ClientName: 'Sacha',
+            ClientName: 'Sacha Doti ',
             ProjectName: 'loli',
-            Date :''
+            Date: '25/01/2023',
         },
-
-        // Add more complaints as needed
     ]);
 
     const [modal, setModal] = useState(false);
     const [formValues, setFormValues] = useState({
         clientName: '',
         projectName: '',
-        date: ''
-
+        date: '',
     });
 
     const toggle = () => setModal(!modal);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission and add new complaint
         const newIntervention = {
-            id: intervention.length + 1,
-            date: new Date().toLocaleString(),
-
+            id: interventions.length + 1,
+            clientName: formValues.clientName,
+            projectName: formValues.projectName,
+            date: formValues.date,
         };
-        setIntervention((prevIntervention) => [...prevIntervention, newIntervention]);
+        setInterventions((prevInterventions) => [...prevInterventions, newIntervention]);
         setModal(false);
         setFormValues({
             clientName: '',
             projectName: '',
-            date: ''
+            date: '',
         });
     };
 
@@ -53,15 +49,10 @@ const InterventionList = () => {
         // Add your edit logic here
     };
 
-
     const handleRemove = (id) => {
-        // Create a new array without the complaint with the given id
-        const updatedIntervention = intervention.filter((intervention) => intervention.id !== id);
-
-        // Update the data source with the updated array of complaints
-        setIntervention(updatedIntervention);
+        const updatedInterventions = interventions.filter((intervention) => intervention.id !== id);
+        setInterventions(updatedInterventions);
     };
-
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -75,10 +66,23 @@ const InterventionList = () => {
         <div className="intervention-list-container">
             <h2>Intervention List</h2>
             <div className="add-button-container">
-                <Button color="danger" onClick={toggle}>
+                <Button
+                    onClick={toggle}
+                    style={{
+                        backgroundColor: '#00a19a',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '4px',
+                        padding: '10px 20px',
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.3s ease',
+                    }}
+                >
                     Add Intervention
                 </Button>
-                <Modal isOpen={modal} toggle={toggle}  className="modal-container">
+                <Modal isOpen={modal} toggle={toggle} className="modal-container">
                     <ModalHeader toggle={toggle} className="modal-header">
                         Add Intervention
                     </ModalHeader>
@@ -107,14 +111,13 @@ const InterventionList = () => {
                             <div>
                                 <label htmlFor="date">Date:</label>
                                 <input
-                                    type="text"
+                                    type="date"
                                     id="date"
                                     name="date"
                                     value={formValues.date}
                                     onChange={handleInputChange}
                                 />
                             </div>
-
                         </form>
                     </ModalBody>
                     <ModalFooter className="modal-footer">
@@ -127,8 +130,6 @@ const InterventionList = () => {
                     </ModalFooter>
                 </Modal>
             </div>
-
-
             <table className="intervention-table">
                 <thead>
                 <tr>
@@ -140,16 +141,25 @@ const InterventionList = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {intervention.map((complaint) => (
-                    <tr key={intervention.id}>
-                        <td>{intervention.id}</td>
-                        <td>{intervention.ClientName}</td>
-                        <td>{intervention.ProjectName}</td>
-                        <td>{intervention.date}</td>
+                {interventions.map((complaint) => (
+                    <tr key={complaint.id}>
+                        <td>{complaint.id}</td>
+                        <td>{complaint.ClientName}</td>
+                        <td>{complaint.ProjectName}</td>
+                        <td>{complaint.Date}</td>
                         <td>
-                            <button className="button button-primary" onClick={() => handleEdit(complaint.id)}>Edit</button>
-                            <button className="button button-danger" onClick={() => handleRemove(complaint.id)}>Remove</button>
-
+                            <button
+                                className="button button-primary"
+                                onClick={() => handleEdit(complaint.id)}
+                            >
+                                Edit
+                            </button>
+                            <button
+                                className="button button-danger"
+                                onClick={() => handleRemove(complaint.id)}
+                            >
+                                Remove
+                            </button>
                         </td>
                     </tr>
                 ))}
