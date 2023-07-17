@@ -8,14 +8,14 @@ const ComplaintList = () => {
             id: 1,
             ClientName: 'Myriam Ladhari',
             ProjectName: 'Gigi',
-            ComplaintType : 'huh',
+            ComplaintType: 'huh',
             ComplaintDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         },
         {
             id: 2,
             ClientName: 'Sacha',
             ProjectName: 'loli',
-            ComplaintType : 'gui',
+            ComplaintType: 'gui',
             ComplaintDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         },
 
@@ -23,6 +23,7 @@ const ComplaintList = () => {
     ]);
 
     const [modal, setModal] = useState(false);
+    const [modalMode, setModalMode] = useState('add'); // Define the modal mode state
     const [formValues, setFormValues] = useState({
         clientName: '',
         projectName: '',
@@ -34,14 +35,24 @@ const ComplaintList = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission and add new complaint
-        const newComplaint = {
-            id: complaints.length + 1,
-            time: new Date().toLocaleString(),
-            description: formValues.complaintDescription,
-            // Add other form values to the complaint object
-        };
-        setComplaints((prevComplaints) => [...prevComplaints, newComplaint]);
+        if (modalMode === 'add') {
+            // Handle form submission and add new complaint
+            const newComplaint = {
+                id: complaints.length + 1,
+                time: new Date().toLocaleString(),
+                description: formValues.complaintDescription,
+                // Add other form values to the complaint object
+            };
+            setComplaints((prevComplaints) => [...prevComplaints, newComplaint]);
+        } else if (modalMode === 'edit') {
+            // Handle form submission and update the existing complaint
+            // Find the complaint with the matching ID
+            const updatedComplaints = complaints.map((complaint) =>
+                complaint.id === formValues.id ? { ...complaint, ...formValues } : complaint
+            );
+            setComplaints(updatedComplaints);
+        }
+
         setModal(false);
         setFormValues({
             clientName: '',
@@ -51,9 +62,24 @@ const ComplaintList = () => {
         });
     };
 
+
     const handleEdit = (id) => {
         console.log(`Editing complaint with ID: ${id}`);
-        // Add your edit logic here
+        // Find the complaint with the matching ID
+        const complaintToEdit = complaints.find((complaint) => complaint.id === id);
+        if (complaintToEdit) {
+            // Set the form values with the complaint data
+            setFormValues({
+                id: complaintToEdit.id, // Add the ID to the form values
+                clientName: complaintToEdit.ClientName,
+                projectName: complaintToEdit.ProjectName,
+                complaintType: complaintToEdit.ComplaintType,
+                complaintDescription: complaintToEdit.ComplaintDescription,
+            });
+            // Set the mode to "edit" and open the modal
+            setModalMode('edit');
+            setModal(true);
+        }
     };
 
 
@@ -76,7 +102,7 @@ const ComplaintList = () => {
 
     return (
         <div className="complaint-list-container">
-            <h2>Complaint List</h2>
+            <h2>Complaints List</h2>
             <div className="add-button-container">
                 <Button
                     onClick={toggle}
@@ -94,9 +120,9 @@ const ComplaintList = () => {
                 >
                     Add Complaint
                 </Button>
-                <Modal isOpen={modal} toggle={toggle}  className="modal-container">
+                <Modal isOpen={modal} toggle={toggle} className="modal-container">
                     <ModalHeader toggle={toggle} className="modal-header">
-                        Ajouter Reclamation
+                        {modalMode === 'add' ? 'Add Complaint' : 'Edit Complaint'} {/* Display the mode in the modal header */}
                     </ModalHeader>
                     <ModalBody className="modal-body">
                         <form onSubmit={handleSubmit}>
@@ -143,17 +169,17 @@ const ComplaintList = () => {
                     </ModalBody>
                     <ModalFooter className="modal-footer">
                         <Button color="primary" onClick={handleSubmit}>
-                            Ajouter
+                            {modalMode === 'add' ? 'Add' : 'Update'} {/* Display the action button label based on the mode */}
                         </Button>{' '}
                         <Button color="secondary" onClick={toggle}>
-                            Annuler
+                            Cancel
                         </Button>
                     </ModalFooter>
                 </Modal>
             </div>
 
 
-    <table className="complaint-table">
+            <table className="complaint-table">
                 <thead>
                 <tr>
                     <th>Complaint ID</th>

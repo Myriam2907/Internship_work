@@ -7,18 +7,18 @@ const ProjectList = () => {
         {
             id: 1,
             ProjectName: 'Myriam Ladhari',
-            ClientID: '',
-            TeamMembers: '',
-            StartDate: '',
-            EndDate: '',
+            ClientID: '1',
+            TeamMembers: 'M.DE--L.KL',
+            StartDate: '03/07/2023',
+            EndDate: '03/08/2023',
         },
         {
             id: 2,
             ProjectName: 'Sacha',
-            ClientID: '',
-            TeamMembers: '',
-            StartDate: '',
-            EndDate: '',
+            ClientID: '2',
+            TeamMembers: 'K.ML--F.FR',
+            StartDate: '07/05/2023',
+            EndDate: '09/07/2023',
         },
     ]);
 
@@ -30,16 +30,32 @@ const ProjectList = () => {
         StartDate: '',
         EndDate: '',
     });
+    const [editProjectId, setEditProjectId] = useState(null);
 
-    const toggle = () => setModal(!modal);
+    const toggle = () => {
+        setModal(!modal);
+        if (!modal) {
+            setEditProjectId(null);
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const newProject = {
-            id: projects.length + 1,
-            ...formValues,
-        };
-        setProjects((prevProjects) => [...prevProjects, newProject]);
+        if (editProjectId) {
+            // Update existing project
+            const updatedProjects = projects.map((project) =>
+                project.id === editProjectId ? { ...project, ...formValues } : project
+            );
+            setProjects(updatedProjects);
+            setEditProjectId(null); // Reset editProjectId after update
+        } else {
+            // Add new project
+            const newProject = {
+                id: projects.length + 1,
+                ...formValues,
+            };
+            setProjects((prevProjects) => [...prevProjects, newProject]);
+        }
         setModal(false);
         setFormValues({
             ProjectName: '',
@@ -52,7 +68,12 @@ const ProjectList = () => {
 
     const handleEdit = (id) => {
         console.log(`Editing Project with ID: ${id}`);
-        // Add your edit logic here
+        setEditProjectId(id);
+        const projectToEdit = projects.find((project) => project.id === id);
+        if (projectToEdit) {
+            setFormValues(projectToEdit);
+            setModal(true);
+        }
     };
 
     const handleRemove = (id) => {
@@ -89,11 +110,9 @@ const ProjectList = () => {
                     Add Project
                 </Button>
 
-
-
                 <Modal isOpen={modal} toggle={toggle} className="modal-container">
                     <ModalHeader toggle={toggle} className="modal-header">
-                        Add Project
+                        {editProjectId ? 'Edit Project' : 'Add Project'}
                     </ModalHeader>
                     <ModalBody className="modal-body">
                         <form onSubmit={handleSubmit}>
@@ -130,7 +149,7 @@ const ProjectList = () => {
                             <div>
                                 <label htmlFor="StartDate">Start Date:</label>
                                 <input
-                                    type="text"
+                                    type="date"
                                     id="StartDate"
                                     name="StartDate"
                                     value={formValues.StartDate}
@@ -140,7 +159,7 @@ const ProjectList = () => {
                             <div>
                                 <label htmlFor="EndDate">End Date:</label>
                                 <input
-                                    type="text"
+                                    type="date"
                                     id="EndDate"
                                     name="EndDate"
                                     value={formValues.EndDate}
@@ -151,7 +170,7 @@ const ProjectList = () => {
                     </ModalBody>
                     <ModalFooter className="modal-footer">
                         <Button color="primary" onClick={handleSubmit}>
-                            Add
+                            {editProjectId ? 'Update' : 'Add'}
                         </Button>{' '}
                         <Button color="secondary" onClick={toggle}>
                             Cancel

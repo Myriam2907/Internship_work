@@ -12,7 +12,7 @@ const SideBar = ({isOpen, toggle, activeLink, handleLinkClick}) => (
         &times;
     </span>
         <div className="logo-container" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <img src={require("./axia.png")} alt="Logo" className="logo" style={{ width: "100px", height: "100px" }} />
+            <img src={require("./axia.png")} alt="Logo" className="logo" style={{ width: "200px", height: "130px" }} />
         </div>
 
 

@@ -3,7 +3,7 @@ import './client.css';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const ClientList = () => {
-    const [Client, setClient] = useState([
+    const [clients, setClients] = useState([
         {
             id: 1,
             ClientName: 'Myriam Ladhari',
@@ -25,16 +25,32 @@ const ClientList = () => {
         Email: '',
         PhoneNb: '',
     });
+    const [editMode, setEditMode] = useState(false); // Add editMode state
 
-    const toggle = () => setModal(!modal);
+    const toggle = () => {
+        setModal(!modal);
+        setEditMode(false); // Reset edit mode when modal is closed
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission and add new client
-        const newClient = {
-            id: Client.length + 1,
-        };
-        setClient((prevClient) => [...prevClient, newClient]);
+        if (editMode) {
+            // Handle form submission and update existing client
+            const updatedClients = clients.map((client) =>
+                client.id === formValues.id ? { ...client, ...formValues } : client
+            );
+            setClients(updatedClients);
+        } else {
+            // Handle form submission and add new client
+            const newClient = {
+                id: clients.length + 1,
+                ClientName: formValues.clientName,
+                Email: formValues.Email,
+                PhoneNb: formValues.PhoneNb,
+            };
+            setClients((prevClients) => [...prevClients, newClient]);
+        }
+
         setModal(false);
         setFormValues({
             clientName: '',
@@ -45,14 +61,24 @@ const ClientList = () => {
 
     const handleEdit = (id) => {
         console.log(`Editing Client with ID: ${id}`);
-        // Add your edit logic here
+        const clientToEdit = clients.find((client) => client.id === id);
+        if (clientToEdit) {
+            setFormValues({
+                id: clientToEdit.id,
+                clientName: clientToEdit.ClientName,
+                Email: clientToEdit.Email,
+                PhoneNb: clientToEdit.PhoneNb,
+            });
+            setEditMode(true);
+            setModal(true);
+        }
     };
 
     const handleRemove = (id) => {
         // Create a new array without the client with the given id
-        const updatedClient = Client.filter((client) => client.id !== id);
+        const updatedClients = clients.filter((client) => client.id !== id);
         // Update the data source with the updated array of clients
-        setClient(updatedClient);
+        setClients(updatedClients);
     };
 
     const handleInputChange = (e) => {
@@ -85,7 +111,7 @@ const ClientList = () => {
                 </Button>
                 <Modal isOpen={modal} toggle={toggle} className="modal-container">
                     <ModalHeader toggle={toggle} className="modal-header">
-                        Add Client
+                        {editMode ? 'Edit Client' : 'Add Client'}
                     </ModalHeader>
                     <ModalBody className="modal-body">
                         <form onSubmit={handleSubmit}>
@@ -111,7 +137,7 @@ const ClientList = () => {
                                 />
                             </div>
                             <div>
-                                <label htmlFor="PhoneNb">PhoneNb :</label>
+                                <label htmlFor="PhoneNb">Phone Number:</label>
                                 <input
                                     type="tel"
                                     id="PhoneNb"
@@ -123,18 +149,16 @@ const ClientList = () => {
                                     required
                                 />
                             </div>
-
-
+                            <ModalFooter className="modal-footer">
+                                <Button color="primary" type="submit">
+                                    {editMode ? 'Update' : 'Add'}
+                                </Button>
+                                <Button color="secondary" onClick={toggle}>
+                                    Cancel
+                                </Button>
+                            </ModalFooter>
                         </form>
                     </ModalBody>
-                    <ModalFooter className="modal-footer">
-                        <Button color="primary" onClick={handleSubmit}>
-                            Add
-                        </Button>{' '}
-                        <Button color="secondary" onClick={toggle}>
-                            Cancel
-                        </Button>
-                    </ModalFooter>
                 </Modal>
             </div>
             <table className="Client-table">
@@ -143,12 +167,12 @@ const ClientList = () => {
                     <th>Client ID</th>
                     <th>Client Name</th>
                     <th>Email</th>
-                    <th>PhoneNb</th>
+                    <th>Phone Number</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                {Client.map((client) => (
+                {clients.map((client) => (
                     <tr key={client.id}>
                         <td>{client.id}</td>
                         <td>{client.ClientName}</td>

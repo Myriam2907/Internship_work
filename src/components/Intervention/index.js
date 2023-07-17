@@ -20,6 +20,7 @@ const InterventionList = () => {
 
     const [modal, setModal] = useState(false);
     const [formValues, setFormValues] = useState({
+        id: null,
         clientName: '',
         projectName: '',
         date: '',
@@ -29,24 +30,53 @@ const InterventionList = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const newIntervention = {
-            id: interventions.length + 1,
-            clientName: formValues.clientName,
-            projectName: formValues.projectName,
-            date: formValues.date,
-        };
-        setInterventions((prevInterventions) => [...prevInterventions, newIntervention]);
+        if (formValues.id !== null) {
+            // Edit existing intervention
+            const updatedInterventions = interventions.map((intervention) => {
+                if (intervention.id === formValues.id) {
+                    return {
+                        ...intervention,
+                        clientName: formValues.clientName,
+                        projectName: formValues.projectName,
+                        date: formValues.date,
+                    };
+                }
+                return intervention;
+            });
+            setInterventions(updatedInterventions);
+        } else {
+            // Add new intervention
+            const newIntervention = {
+                id: interventions.length + 1,
+                clientName: formValues.clientName,
+                projectName: formValues.projectName,
+                date: formValues.date,
+            };
+            setInterventions((prevInterventions) => [...prevInterventions, newIntervention]);
+        }
+
         setModal(false);
         setFormValues({
+            id: null,
             clientName: '',
             projectName: '',
             date: '',
         });
     };
 
+
     const handleEdit = (id) => {
         console.log(`Editing Intervention with ID: ${id}`);
-        // Add your edit logic here
+        const interventionToEdit = interventions.find((intervention) => intervention.id === id);
+        if (interventionToEdit) {
+            setFormValues({
+                id: interventionToEdit.id,
+                clientName: interventionToEdit.ClientName,
+                projectName: interventionToEdit.ProjectName,
+                date: interventionToEdit.Date,
+            });
+            setModal(true);
+        }
     };
 
     const handleRemove = (id) => {
@@ -64,7 +94,7 @@ const InterventionList = () => {
 
     return (
         <div className="intervention-list-container">
-            <h2>Intervention List</h2>
+            <h2>Interventions List</h2>
             <div className="add-button-container">
                 <Button
                     onClick={toggle}
@@ -84,7 +114,7 @@ const InterventionList = () => {
                 </Button>
                 <Modal isOpen={modal} toggle={toggle} className="modal-container">
                     <ModalHeader toggle={toggle} className="modal-header">
-                        Add Intervention
+                        {formValues.id ? 'Edit Intervention' : 'Add Intervention'}
                     </ModalHeader>
                     <ModalBody className="modal-body">
                         <form onSubmit={handleSubmit}>
@@ -122,7 +152,7 @@ const InterventionList = () => {
                     </ModalBody>
                     <ModalFooter className="modal-footer">
                         <Button color="primary" onClick={handleSubmit}>
-                            Add
+                            {formValues.id ? 'Update' : 'Add'}
                         </Button>{' '}
                         <Button color="secondary" onClick={toggle}>
                             Cancel
@@ -141,22 +171,22 @@ const InterventionList = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {interventions.map((complaint) => (
-                    <tr key={complaint.id}>
-                        <td>{complaint.id}</td>
-                        <td>{complaint.ClientName}</td>
-                        <td>{complaint.ProjectName}</td>
-                        <td>{complaint.Date}</td>
+                {interventions.map((intervention) => (
+                    <tr key={intervention.id}>
+                        <td>{intervention.id}</td>
+                        <td>{intervention.ClientName}</td>
+                        <td>{intervention.ProjectName}</td>
+                        <td>{intervention.Date}</td>
                         <td>
                             <button
                                 className="button button-primary"
-                                onClick={() => handleEdit(complaint.id)}
+                                onClick={() => handleEdit(intervention.id)}
                             >
                                 Edit
                             </button>
                             <button
                                 className="button button-danger"
-                                onClick={() => handleRemove(complaint.id)}
+                                onClick={() => handleRemove(intervention.id)}
                             >
                                 Remove
                             </button>
