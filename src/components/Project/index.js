@@ -7,20 +7,16 @@ import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 const ProjectList = () => {
     const [projects, setProjects] = useState([
         {
-            id: 1,
-            ProjectName: 'Myriam Ladhari',
-            ClientID: '1',
-            TeamMembers: 'Team Member 1, Team Member 2',
-            StartDate: '2023-07-01',
-            EndDate: '2023-07-31',
+
+            ProjectName: 'Project 1',
+            ClientID: 'Client 3',
+
         },
         {
-            id: 2,
-            ProjectName: 'Sacha',
-            ClientID: '2',
-            TeamMembers: 'K.ML--F.FR',
-            StartDate: '2023-07-05',
-            EndDate: '2023-09-07',
+
+            ProjectName: 'Project 2',
+            ClientID: 'Client 1',
+
         },
     ]);
 
