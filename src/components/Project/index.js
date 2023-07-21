@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './Project.css';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const ProjectList = () => {
     const [projects, setProjects] = useState([
@@ -8,17 +10,17 @@ const ProjectList = () => {
             id: 1,
             ProjectName: 'Myriam Ladhari',
             ClientID: '1',
-            TeamMembers: 'M.DE--L.KL',
-            StartDate: '03/07/2023',
-            EndDate: '03/08/2023',
+            TeamMembers: 'Team Member 1, Team Member 2',
+            StartDate: '2023-07-01',
+            EndDate: '2023-07-31',
         },
         {
             id: 2,
             ProjectName: 'Sacha',
             ClientID: '2',
             TeamMembers: 'K.ML--F.FR',
-            StartDate: '07/05/2023',
-            EndDate: '09/07/2023',
+            StartDate: '2023-07-05',
+            EndDate: '2023-09-07',
         },
     ]);
 
@@ -91,84 +93,61 @@ const ProjectList = () => {
 
     return (
         <div className="Project-list-container">
-            <h2>Projects List</h2>
+            <div className="breadcrumb-container">
+                <Breadcrumb className="breadcrumb">
+                    <BreadcrumbItem>Home</BreadcrumbItem>
+                    <BreadcrumbItem active>Projects</BreadcrumbItem>
+                </Breadcrumb>
+            </div>
             <div className="add-button-container">
                 <Button
                     onClick={toggle}
-                    style={{
-                        backgroundColor: '#00a19a',
-                        color: '#fff',
-                        border: 'none',
-                        borderRadius: '4px',
-                        padding: '10px 20px',
-                        fontSize: '16px',
-                        fontWeight: 'bold',
-                        cursor: 'pointer',
-                        transition: 'background-color 0.3s ease',
-                    }}
+                    className="button button-primary"
                 >
-                    Add Project
+                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: '5px' }} />
+
                 </Button>
 
-                <Modal isOpen={modal} toggle={toggle} className="modal-container">
-                    <ModalHeader toggle={toggle} className="modal-header">
+                <Modal isOpen={modal} toggle={toggle}>
+
+
+                    <ModalHeader toggle={toggle} className="Modal-header">
                         {editProjectId ? 'Edit Project' : 'Add Project'}
                     </ModalHeader>
-                    <ModalBody className="modal-body">
+                    <ModalBody className="Modal-body">
                         <form onSubmit={handleSubmit}>
                             <div>
-                                <label htmlFor="ProjectName">Project Name:</label>
-                                <input
+                                <label htmlFor="ProjectName">Project</label>
+                                <select
                                     type="text"
                                     id="ProjectName"
                                     name="ProjectName"
                                     value={formValues.ProjectName}
                                     onChange={handleInputChange}
-                                />
+                                    required
+                                >
+                                    <option value="">Select Project</option>
+                                    <option value="Project 1">Project 1</option>
+                                    <option value="Project 2">Project 2</option>
+                                </select>
                             </div>
                             <div>
-                                <label htmlFor="ClientID">Client ID:</label>
-                                <input
-                                    type="text"
+                                <label htmlFor="ClientID">Client</label>
+                                <select
                                     id="ClientID"
                                     name="ClientID"
                                     value={formValues.ClientID}
                                     onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="TeamMembers">Team Members:</label>
-                                <input
-                                    type="text"
-                                    id="TeamMembers"
-                                    name="TeamMembers"
-                                    value={formValues.TeamMembers}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="StartDate">Start Date:</label>
-                                <input
-                                    type="date"
-                                    id="StartDate"
-                                    name="StartDate"
-                                    value={formValues.StartDate}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="EndDate">End Date:</label>
-                                <input
-                                    type="date"
-                                    id="EndDate"
-                                    name="EndDate"
-                                    value={formValues.EndDate}
-                                    onChange={handleInputChange}
-                                />
+                                    required
+                                >
+                                    <option value="">Select Client</option>
+                                    <option value="Client 1">Client 1</option>
+                                    <option value="Client 2">Client 2</option>
+                                </select>
                             </div>
                         </form>
                     </ModalBody>
-                    <ModalFooter className="modal-footer">
+                    <ModalFooter className="Modal-footer">
                         <Button color="primary" onClick={handleSubmit}>
                             {editProjectId ? 'Update' : 'Add'}
                         </Button>{' '}
@@ -176,36 +155,38 @@ const ProjectList = () => {
                             Cancel
                         </Button>
                     </ModalFooter>
+
                 </Modal>
             </div>
 
             <table className="Project-table">
                 <thead>
                 <tr>
-                    <th>Project ID</th>
-                    <th>Project Name</th>
-                    <th>Client ID</th>
-                    <th>Team Members</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
+                    <th>Project </th>
+                    <th>Client </th>
+
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 {projects.map((project) => (
                     <tr key={project.id}>
-                        <td>{project.id}</td>
+
                         <td>{project.ProjectName}</td>
                         <td>{project.ClientID}</td>
-                        <td>{project.TeamMembers}</td>
-                        <td>{project.StartDate}</td>
-                        <td>{project.EndDate}</td>
-                        <td>
-                            <button className="button button-primary" onClick={() => handleEdit(project.id)}>
-                                Edit
+
+                        <td className="project-actions">
+                            <button
+                                className="button button-primary"
+                                onClick={() => handleEdit(project.id)}
+                            >
+                                <FontAwesomeIcon icon={faEdit} />
                             </button>
-                            <button className="button button-danger" onClick={() => handleRemove(project.id)}>
-                                Remove
+                            <button
+                                className="button button-danger"
+                                onClick={() => handleRemove(project.id)}
+                            >
+                                <FontAwesomeIcon icon={faTrash} />
                             </button>
                         </td>
                     </tr>

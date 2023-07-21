@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
 import './ComplaintList.css';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter,Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 const ComplaintList = () => {
     const [complaints, setComplaints] = useState([
         {
             id: 1,
-            ClientName: 'Myriam Ladhari',
-            ProjectName: 'Gigi',
-            ComplaintType: 'huh',
+            ClientName: 'Client 1',
+            ProjectName: 'Project 2',
             ComplaintDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         },
         {
             id: 2,
-            ClientName: 'Sacha',
-            ProjectName: 'loli',
-            ComplaintType: 'gui',
-            ComplaintDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            ClientName: 'Client 2',
+            ProjectName: 'Project 1',
+            ComplaintDescription: 'Sed sodales erat vel eros congue, sed laoreet sem accumsan.',
         },
 
         // Add more complaints as needed
@@ -39,7 +38,6 @@ const ComplaintList = () => {
             // Handle form submission and add new complaint
             const newComplaint = {
                 id: complaints.length + 1,
-                time: new Date().toLocaleString(),
                 description: formValues.complaintDescription,
                 // Add other form values to the complaint object
             };
@@ -102,12 +100,17 @@ const ComplaintList = () => {
 
     return (
         <div className="complaint-list-container">
-            <h2>Complaints List</h2>
+            <div className="breadcrumb-container">
+                <Breadcrumb>
+                    <BreadcrumbItem>Home</BreadcrumbItem>
+                    <BreadcrumbItem active>Complaints</BreadcrumbItem>
+                </Breadcrumb>
+            </div>
             <div className="add-button-container">
                 <Button
                     onClick={toggle}
                     style={{
-                        backgroundColor: '#00a19a',
+                        backgroundColor: 'transparent',
                         color: '#fff',
                         border: 'none',
                         borderRadius: '4px',
@@ -118,95 +121,118 @@ const ComplaintList = () => {
                         transition: 'background-color 0.3s ease',
                     }}
                 >
-                    Add Complaint
+                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: '5px', color: '#007bff' }} />
                 </Button>
-                <Modal isOpen={modal} toggle={toggle} className="modal-container">
-                    <ModalHeader toggle={toggle} className="modal-header">
-                        {modalMode === 'add' ? 'Add Complaint' : 'Edit Complaint'} {/* Display the mode in the modal header */}
-                    </ModalHeader>
-                    <ModalBody className="modal-body">
-                        <form onSubmit={handleSubmit}>
-                            <div>
-                                <label htmlFor="clientName">Client Name:</label>
-                                <input
-                                    type="text"
-                                    id="clientName"
-                                    name="clientName"
-                                    value={formValues.clientName}
-                                    onChange={handleInputChange}
-                                />
+                <Modal isOpen={modal} toggle={toggle}>
+                    <form onSubmit={handleSubmit}>
+                        <ModalHeader toggle={toggle} className="modal-header">
+                            {modalMode === 'add' ? 'Add Complaint' : 'Edit Complaint'}
+                        </ModalHeader>
+                        <ModalBody>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ flex: 1, marginRight: '10px' }}>
+                                    <label htmlFor="clientName">Client:</label>
+                                    <select
+                                        id="clientName"
+                                        name="clientId"
+                                        value={formValues.clientId}
+                                        onChange={handleInputChange}
+                                        required
+                                        style={{ width: '100%', height: '40px' }}
+                                    >
+                                        <option value="">Select Client</option>
+                                        {complaints.map((complaint) => (
+                                            <option key={complaint.id} value={complaint.ClientName}>
+                                                {complaint.ClientName}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div style={{ flex: 1, marginRight: '10px' }}>
+                                    <label htmlFor="projectName">Project:</label>
+                                    <select
+                                        id="projectName"
+                                        name="projectName"
+                                        value={formValues.projectName}
+                                        onChange={handleInputChange}
+                                        required
+                                        style={{ width: '100%', height: '40px' }}
+                                    >
+                                        <option value="">Select Project</option>
+                                        {complaints.map((complaint) => (
+                                            <option key={complaint.id} value={complaint.ProjectName}>
+                                                {complaint.ProjectName}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
                             <div>
-                                <label htmlFor="projectName">Project Name:</label>
-                                <input
-                                    type="text"
-                                    id="projectName"
-                                    name="projectName"
-                                    value={formValues.projectName}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="complaintType">Complaint Type:</label>
-                                <input
-                                    type="text"
-                                    id="complaintType"
-                                    name="complaintType"
-                                    value={formValues.complaintType}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="complaintDescription">Complaint Description:</label>
+                                <label htmlFor="complaintDescription"> Description:</label>
                                 <textarea
                                     id="complaintDescription"
                                     name="complaintDescription"
                                     value={formValues.complaintDescription}
                                     onChange={handleInputChange}
+                                    required
+                                    rows={5}
                                 />
                             </div>
-                        </form>
-                    </ModalBody>
-                    <ModalFooter className="modal-footer">
-                        <Button color="primary" onClick={handleSubmit}>
-                            {modalMode === 'add' ? 'Add' : 'Update'} {/* Display the action button label based on the mode */}
-                        </Button>{' '}
-                        <Button color="secondary" onClick={toggle}>
-                            Cancel
-                        </Button>
-                    </ModalFooter>
+                        </ModalBody>
+                        <ModalFooter className="modal-footer">
+                            <Button
+                                color="secondary"
+                                style={{ backgroundColor: '#CCCCCC', color: '#333' }}
+                                onClick={toggle}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                color="primary"
+                                style={{ backgroundColor: '#007BFF', color: '#fff' }}
+                                onClick={handleSubmit}
+                            >
+                                {formValues.id ? 'Update' : 'Add'}
+                            </Button>
+                        </ModalFooter>
+                    </form>
                 </Modal>
             </div>
-
-
             <table className="complaint-table">
-                <thead>
-                <tr>
-                    <th>Complaint ID</th>
-                    <th>Client Name</th>
-                    <th>Project Name</th>
-                    <th>Complaint Type</th>
-                    <th>Complaint Description</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {complaints.map((complaint) => (
-                    <tr key={complaint.id}>
-                        <td>{complaint.id}</td>
-                        <td>{complaint.ClientName}</td>
-                        <td>{complaint.ProjectName}</td>
-                        <td>{complaint.ComplaintType}</td>
-                        <td>{complaint.ComplaintDescription}</td>
-                        <td>
-                            <button className="button button-primary" onClick={() => handleEdit(complaint.id)}>Edit</button>
-                            <button className="button button-danger" onClick={() => handleRemove(complaint.id)}>Remove</button>
 
-                        </td>
+                    <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Project</th>
+                        <th>Description</th>
+                        <th>Actions</th>
                     </tr>
-                ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {complaints.map((complaint) => (
+                        <tr key={complaint.id}>
+                            <td>{complaint.ClientName}</td>
+                            <td>{complaint.ProjectName}</td>
+                            <td>{complaint.ComplaintDescription}</td>
+                            <td>
+                                <button
+                                    className="button button-primary"
+                                    onClick={() => handleEdit(complaint.id)}
+                                >
+                                    <FontAwesomeIcon icon={faEdit} />
+                                </button>
+                                <button
+                                    className="button button-danger"
+                                    onClick={() => handleRemove(complaint.id)}
+                                >
+                                    <FontAwesomeIcon icon={faTrash} />
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+
         </div>
     );
 };

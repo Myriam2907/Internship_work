@@ -1,62 +1,3 @@
-.Client-list-container {
-    margin-top: 20px;
-}
-
-.Client-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.Client-table th,
-.Client-table td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.Client-table th {
-    background-color: #f5f5f5;
-}
-
-.Client-actions button {
-    margin-right: 5px;
-}
-
-.Client-list-container {
-    text-align: center;
-}
-.button {
-    display: inline-block;
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.button-primary {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.button-primary:hover {
-    background-color: #0056b3;
-}
-
-.button-danger {
-    background-color: #dc3545;
-    color: #fff;
-}
-
-.button-danger:hover {
-    background-color: #c82333;
-}
-
-
 /* Global styles */
 
 body {
@@ -64,7 +5,9 @@ body {
     margin: 0;
     padding: 0;
 }
-
+.Client-table th {
+    background-color:#f5f5f5 ;
+}
 /* Container styles */
 
 .Client-list-container {
@@ -89,11 +32,12 @@ body {
 }
 
 .add-button-container button {
-    background-color: #dc3545;
-    color: #fff;
+    margin-left: 10px;
+    background-color: transparent;
+    color: #007bff;
     border: none;
     border-radius: 4px;
-    padding: 10px 20px;
+    padding: 10px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
@@ -101,7 +45,11 @@ body {
 }
 
 .add-button-container button:hover {
-    background-color: #c82333;
+    background-color: #f0f0f0;
+}
+
+.add-button-container .icon {
+    margin-right: 5px;
 }
 
 /* Modal styles */
@@ -115,151 +63,165 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
-    overflow: auto;
-}
-
-.modal-content {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 75px;
-    width: 80%;
-    max-width: 500px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    margin: auto;
-}
-
-@media only screen and (max-width: 500px) {
-    .modal-content {
-        width: 90%;
-        padding: 50px;
-    }
-}
-
-
-.modal-body {
-    margin-bottom: 20px;
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
 }
 
 .modal-footer button {
-    margin-left: 10px;
     background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 8px;
     padding: 12px 24px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
+.modal-footer button:first-child {
+    margin-right: 10px;
+}
+
 .modal-footer button:hover {
     background-color: #0069d9;
 }
-
 
 .modal-header {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 18px;
     color: #333;
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .modal-body {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    color: #555;
 }
 
 .modal-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between; /* Change to space-between to align buttons in the same line */
 }
-
-.modal-footer button {
-    margin-left: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 24px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.modal-footer button:hover {
-    background-color: #0069d9;
-}
-
-
-
-
-/* Input and textarea styles */
-
 form div {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 label {
     display: block;
     font-size: 18px;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    color: #333;
 }
 
 input[type="text"],
-textarea {
+textarea,
+input[type="email"],
+input[type="tel"] {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #333;
+    background-color: #f7f7f7;
 }
 
 input[type="text"]:focus,
-textarea:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-input[type="email"],
-textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
+textarea:focus,
 input[type="email"]:focus,
-textarea:focus {
+input[type="tel"]:focus {
     outline: none;
     border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
 }
 
-input[type="tel"],
-textarea {
+input[type="text"]::placeholder,
+textarea::placeholder,
+input[type="email"]::placeholder,
+input[type="tel"]::placeholder {
+    color: #888;
+}
+
+.Client-list-container {
+    margin-top: 20px;
+}
+
+.Client-table {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+    border-collapse: collapse;
 }
 
-input[type="tel"]:focus,
-textarea:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+.Client-table th,
+.Client-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.Client-table th,
+td {
+    background-color: white;
+}
+
+.Client-list-container {
+    text-align: center;
+}
+
+.button {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.Client-table .button.button-primary,
+.Client-table .button.button-danger {
+    background-color: transparent;
+}
+
+.Client-table .button.button-primary svg path {
+    fill: green;
+}
+
+.Client-table .button.button-danger svg path {
+    fill: red;
+}
+
+.breadcrumb-container {
+    text-align: left;
+}
+
+.breadcrumb {
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.breadcrumb {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.breadcrumb-item {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.breadcrumb-item:last-child {
+    margin-right: 0;
+}
+
+.breadcrumb-item.active {
+    font-weight: bold;
 }

@@ -1,21 +1,14 @@
 import React, { useState } from 'react';
 import './intervention.css';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const InterventionList = () => {
     const [interventions, setInterventions] = useState([
-        {
-            id: 1,
-            ClientName: 'Myriam Ladhari',
-            ProjectName: 'Gigi',
-            Date: '28/05/2023',
-        },
-        {
-            id: 2,
-            ClientName: 'Sacha Doti ',
-            ProjectName: 'loli',
-            Date: '25/01/2023',
-        },
+        { id: 1, ClientName: 'Client 1', ProjectName: 'Project 2', Date: '28/05/2023' ,Description:'Lorem ipsum dolor sit amet, consectetur adipiscing elit'},
+        { id: 2, ClientName: 'Client 2', ProjectName: 'Project 1', Date: '25/01/2023' ,Description:'Sed sodales erat vel eros congue, sed laoreet sem accumsan'},
+        // Add more interventions as needed
     ]);
 
     const [modal, setModal] = useState(false);
@@ -24,9 +17,19 @@ const InterventionList = () => {
         clientName: '',
         projectName: '',
         date: '',
+        description:'',
     });
 
-    const toggle = () => setModal(!modal);
+    const toggle = () => {
+        setModal(!modal);
+        setFormValues({
+            id: null,
+            clientName: '',
+            projectName: '',
+            date: '',
+            description:'',
+        });
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -36,21 +39,23 @@ const InterventionList = () => {
                 if (intervention.id === formValues.id) {
                     return {
                         ...intervention,
-                        clientName: formValues.clientName,
-                        projectName: formValues.projectName,
-                        date: formValues.date,
+                        ClientName: formValues.clientName,
+                        ProjectName: formValues.projectName,
+                        Date: formValues.date,
+                        Description:formValues.description,
                     };
                 }
                 return intervention;
             });
             setInterventions(updatedInterventions);
         } else {
-            // Add new intervention
+            // Add new intervention with a unique ID
             const newIntervention = {
-                id: interventions.length + 1,
-                clientName: formValues.clientName,
-                projectName: formValues.projectName,
-                date: formValues.date,
+                id: Date.now(), // Use a unique value, such as a timestamp
+                ClientName: formValues.clientName,
+                ProjectName: formValues.projectName,
+                Date: formValues.date,
+                Description:formValues.description,
             };
             setInterventions((prevInterventions) => [...prevInterventions, newIntervention]);
         }
@@ -61,22 +66,31 @@ const InterventionList = () => {
             clientName: '',
             projectName: '',
             date: '',
+            description:'',
         });
     };
 
-
     const handleEdit = (id) => {
         console.log(`Editing Intervention with ID: ${id}`);
-        const interventionToEdit = interventions.find((intervention) => intervention.id === id);
-        if (interventionToEdit) {
+        const index = interventions.findIndex((intervention) => intervention.id === id);
+        if (index !== -1) {
+            const interventionToEdit = interventions[index];
             setFormValues({
                 id: interventionToEdit.id,
                 clientName: interventionToEdit.ClientName,
                 projectName: interventionToEdit.ProjectName,
                 date: interventionToEdit.Date,
+                description: interventionToEdit.Description,
             });
             setModal(true);
         }
+    };
+
+    const formatDateForInput = (dateString) => {
+        if (dateString === '') return ''; // Handle the case when the date is empty
+        const dateParts = dateString.split('/');
+        const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+        return formattedDate;
     };
 
     const handleRemove = (id) => {
@@ -91,15 +105,19 @@ const InterventionList = () => {
             [name]: value,
         }));
     };
-
     return (
         <div className="intervention-list-container">
-            <h2>Interventions List</h2>
+            <div className="breadcrumb-container">
+                <Breadcrumb>
+                    <BreadcrumbItem>Home</BreadcrumbItem>
+                    <BreadcrumbItem active>Interventions </BreadcrumbItem>
+                </Breadcrumb>
+            </div>
             <div className="add-button-container">
                 <Button
                     onClick={toggle}
                     style={{
-                        backgroundColor: '#00a19a',
+                        backgroundColor: 'transparent',
                         color: '#fff',
                         border: 'none',
                         borderRadius: '4px',
@@ -110,85 +128,126 @@ const InterventionList = () => {
                         transition: 'background-color 0.3s ease',
                     }}
                 >
-                    Add Intervention
+                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: '5px', color: '#007bff' }} />
                 </Button>
-                <Modal isOpen={modal} toggle={toggle} className="modal-container">
+                <Modal isOpen={modal} toggle={toggle} className="custom-modal">
                     <ModalHeader toggle={toggle} className="modal-header">
                         {formValues.id ? 'Edit Intervention' : 'Add Intervention'}
                     </ModalHeader>
                     <ModalBody className="modal-body">
-                        <form onSubmit={handleSubmit}>
-                            <div>
-                                <label htmlFor="clientName">Client Name:</label>
-                                <input
-                                    type="text"
-                                    id="clientName"
-                                    name="clientName"
-                                    value={formValues.clientName}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="projectName">Project Name:</label>
-                                <input
-                                    type="text"
-                                    id="projectName"
-                                    name="projectName"
-                                    value={formValues.projectName}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="date">Date:</label>
-                                <input
+                        <Form onSubmit={handleSubmit}>
+                            <FormGroup>
+                                <div style={{ display: 'flex' }}>
+                                    <div style={{ flex: 1, marginRight: '10px' }}>
+                                        <Label for="clientName">Client:</Label>
+                                        <Input
+                                            type="select"
+                                            id="clientName"
+                                            name="clientName"
+                                            value={formValues.clientName}
+                                            onChange={handleInputChange}
+                                            style={{ width: '100%', height: '40px' }}
+                                        >
+                                            <option value="">Select Client</option>
+                                            {interventions.map((intervention) => (
+                                                <option key={intervention.id} value={intervention.ClientName}>
+                                                    {intervention.ClientName}
+                                                </option>
+                                            ))}
+                                        </Input>
+                                    </div>
+                                    <div style={{ flex: 1, marginRight: '10px' }}>
+                                        <Label for="projectName">Project:</Label>
+                                        <Input
+                                            type="select"
+                                            id="projectName"
+                                            name="projectName"
+                                            value={formValues.projectName}
+                                            onChange={handleInputChange}
+                                            required
+                                            style={{ width: '100%', height: '40px' }}
+                                        >
+                                            <option value="">Select Project</option>
+                                            {interventions.map((intervention) => (
+                                                <option key={intervention.id} value={intervention.ProjectName}>
+                                                    {intervention.ProjectName}
+                                                </option>
+                                            ))}
+                                        </Input>
+                                    </div>
+
+                                </div>
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="date">Date:</Label>
+                                <Input
                                     type="date"
                                     id="date"
                                     name="date"
-                                    value={formValues.date}
+                                    value={formatDateForInput(formValues.date)} // Use value instead of defaultValue
                                     onChange={handleInputChange}
+                                    required
                                 />
-                            </div>
-                        </form>
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="description">Description:</Label>
+                                <textarea
+
+                                    id="description"
+                                    rows={5}
+
+                                    name="description"
+                                    value={formValues.description}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </FormGroup>
+                            <ModalFooter className="modal-footer" >
+
+                                    <Button
+                                        color="secondary"
+                                        style={{ backgroundColor: '#CCCCCC', color: '#333' }}
+                                        onClick={toggle}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        color="primary"
+                                        style={{ backgroundColor: '#007BFF', color: '#fff' }}
+                                        onClick={handleSubmit}
+                                    >
+                                        {formValues.id ? 'Update' : 'Add'}
+                                    </Button>
+
+                            </ModalFooter>
+
+                        </Form>
                     </ModalBody>
-                    <ModalFooter className="modal-footer">
-                        <Button color="primary" onClick={handleSubmit}>
-                            {formValues.id ? 'Update' : 'Add'}
-                        </Button>{' '}
-                        <Button color="secondary" onClick={toggle}>
-                            Cancel
-                        </Button>
-                    </ModalFooter>
                 </Modal>
             </div>
             <table className="intervention-table">
                 <thead>
                 <tr>
-                    <th>Intervention ID</th>
-                    <th>Client Name</th>
-                    <th>Project Name</th>
+                    <th>Client</th>
+                    <th>Project</th>
                     <th>Date</th>
+                    <th>Description</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                {interventions.map((intervention) => (
-                    <tr key={intervention.id}>
-                        <td>{intervention.id}</td>
+                {interventions.map((intervention, index) => (
+                    <tr key={index}>
                         <td>{intervention.ClientName}</td>
                         <td>{intervention.ProjectName}</td>
                         <td>{intervention.Date}</td>
+                        <td>{intervention.Description}</td>
                         <td>
-                            <button
-                                className="button button-primary"
-                                onClick={() => handleEdit(intervention.id)}
-                            >
-                                Edit
+                            <button className="button button-primary" onClick={() => handleEdit(intervention.id)}>
+                                <FontAwesomeIcon icon={faEdit} />
                             </button>
-                            <button
-                                className="button button-danger"
-                                onClick={() => handleRemove(intervention.id)}
-                            >
-                                Remove
+                            <button className="button button-danger" onClick={() => handleRemove(intervention.id)}>
+                                <FontAwesomeIcon icon={faTrash} />
                             </button>
                         </td>
                     </tr>

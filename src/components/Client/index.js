@@ -1,49 +1,56 @@
 import React, { useState } from 'react';
 import './client.css';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const ClientList = () => {
     const [clients, setClients] = useState([
         {
-            id: 1,
-            ClientName: 'Myriam Ladhari',
-            Email: 'maya@gmail.com',
+            reference: '#1F3H34J',
+            ClientName: 'Client 1',
+            Email: 'client1@gmail.com',
             PhoneNb: '90898776',
         },
         {
-            id: 2,
-            ClientName: 'Sacha Doti',
-            Email: 'sacha@gmail.com',
+            reference: '#2H7K5FK',
+            ClientName: 'Client 2',
+            Email: 'client2@gmail.com',
             PhoneNb: '34245378',
         },
         // Add more clients as needed
     ]);
 
+
+
     const [modal, setModal] = useState(false);
+
     const [formValues, setFormValues] = useState({
+        reference: '',
         clientName: '',
         Email: '',
         PhoneNb: '',
     });
-    const [editMode, setEditMode] = useState(false); // Add editMode state
 
     const toggle = () => {
         setModal(!modal);
         setEditMode(false); // Reset edit mode when modal is closed
     };
 
+    const [editMode, setEditMode] = useState(false); // Add editMode state
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (editMode) {
             // Handle form submission and update existing client
-            const updatedClients = clients.map((client) =>
-                client.id === formValues.id ? { ...client, ...formValues } : client
+            const updatedClients = clients.map((client, index) =>
+                index === formValues.id ? { ...client, ...formValues } : client
             );
             setClients(updatedClients);
         } else {
             // Handle form submission and add new client
             const newClient = {
-                id: clients.length + 1,
+                reference: formValues.reference,
                 ClientName: formValues.clientName,
                 Email: formValues.Email,
                 PhoneNb: formValues.PhoneNb,
@@ -53,18 +60,20 @@ const ClientList = () => {
 
         setModal(false);
         setFormValues({
+            reference: '',
             clientName: '',
             Email: '',
             PhoneNb: '',
         });
     };
 
-    const handleEdit = (id) => {
-        console.log(`Editing Client with ID: ${id}`);
-        const clientToEdit = clients.find((client) => client.id === id);
+    const handleEdit = (index) => {
+        console.log(`Editing Client at index: ${index}`);
+        const clientToEdit = clients[index];
         if (clientToEdit) {
             setFormValues({
-                id: clientToEdit.id,
+                id: index,
+                reference: clientToEdit.reference,
                 clientName: clientToEdit.ClientName,
                 Email: clientToEdit.Email,
                 PhoneNb: clientToEdit.PhoneNb,
@@ -74,9 +83,10 @@ const ClientList = () => {
         }
     };
 
-    const handleRemove = (id) => {
-        // Create a new array without the client with the given id
-        const updatedClients = clients.filter((client) => client.id !== id);
+    const handleRemove = (index) => {
+        // Create a new array without the client at the given index
+        const updatedClients = [...clients];
+        updatedClients.splice(index, 1);
         // Update the data source with the updated array of clients
         setClients(updatedClients);
     };
@@ -91,30 +101,47 @@ const ClientList = () => {
 
     return (
         <div className="Client-list-container">
-            <h2>Clients List</h2>
+            <div className="breadcrumb-container">
+                <Breadcrumb>
+                    <BreadcrumbItem>Home</BreadcrumbItem>
+                    <BreadcrumbItem active>Clients </BreadcrumbItem>
+                </Breadcrumb>
+            </div>
             <div className="add-button-container">
                 <Button
                     onClick={toggle}
                     style={{
-                        backgroundColor: '#00a19a',
-                        color: '#fff',
+                        backgroundColor: 'transparent',
+                        color: '#007bff',
                         border: 'none',
                         borderRadius: '4px',
-                        padding: '10px 20px',
+                        padding: '10px',
                         fontSize: '16px',
                         fontWeight: 'bold',
                         cursor: 'pointer',
                         transition: 'background-color 0.3s ease',
                     }}
                 >
-                    Add Client
+                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: '5px', color: '#007bff' }} />
                 </Button>
-                <Modal isOpen={modal} toggle={toggle} className="modal-container">
+
+                <Modal isOpen={modal} toggle={toggle}>
                     <ModalHeader toggle={toggle} className="modal-header">
                         {editMode ? 'Edit Client' : 'Add Client'}
                     </ModalHeader>
                     <ModalBody className="modal-body">
                         <form onSubmit={handleSubmit}>
+                            <div>
+                                <label htmlFor="reference">Reference</label>
+                                <input
+                                    type="text"
+                                    id="reference"
+                                    name="reference"
+                                    value={formValues.reference}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
                             <div>
                                 <label htmlFor="clientName">Client Name:</label>
                                 <input
@@ -123,6 +150,7 @@ const ClientList = () => {
                                     name="clientName"
                                     value={formValues.clientName}
                                     onChange={handleInputChange}
+                                    required
                                 />
                             </div>
                             <div>
@@ -131,6 +159,7 @@ const ClientList = () => {
                                     type="email"
                                     id="Email"
                                     name="Email"
+                                    placeholder="example@exp.com"
                                     value={formValues.Email}
                                     onChange={handleInputChange}
                                     required
@@ -142,6 +171,7 @@ const ClientList = () => {
                                     type="tel"
                                     id="PhoneNb"
                                     name="PhoneNb"
+                                    placeholder="00 000 000"
                                     pattern="[0-9]{8}"
                                     title="Please enter an 8-digit number"
                                     value={formValues.PhoneNb}
@@ -150,13 +180,14 @@ const ClientList = () => {
                                 />
                             </div>
                             <ModalFooter className="modal-footer">
-                                <Button color="primary" type="submit">
-                                    {editMode ? 'Update' : 'Add'}
-                                </Button>
-                                <Button color="secondary" onClick={toggle}>
+                                <Button color="secondary" style={{ backgroundColor: '#CCCCCC', color: '#333' }} onClick={toggle}>
                                     Cancel
                                 </Button>
+                                <Button color="primary" style={{ backgroundColor: '#007BFF', color: '#fff' }} type="submit">
+                                    {editMode ? 'Update' : 'Add'}
+                                </Button>
                             </ModalFooter>
+
                         </form>
                     </ModalBody>
                 </Modal>
@@ -164,32 +195,28 @@ const ClientList = () => {
             <table className="Client-table">
                 <thead>
                 <tr>
-                    <th>Client ID</th>
-                    <th>Client Name</th>
+                    <th>Reference</th>
+                    <th>Client</th>
                     <th>Email</th>
                     <th>Phone Number</th>
+                    <th></th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                {clients.map((client) => (
-                    <tr key={client.id}>
-                        <td>{client.id}</td>
+                {clients.map((client, index) => (
+                    <tr key={index}>
+                        <td>{client.reference}</td>
                         <td>{client.ClientName}</td>
                         <td>{client.Email}</td>
                         <td>{client.PhoneNb}</td>
+                        <td></td>
                         <td>
-                            <button
-                                className="button button-primary"
-                                onClick={() => handleEdit(client.id)}
-                            >
-                                Edit
+                            <button className="button button-primary" onClick={() => handleEdit(index)}>
+                                <FontAwesomeIcon icon={faEdit} />
                             </button>
-                            <button
-                                className="button button-danger"
-                                onClick={() => handleRemove(client.id)}
-                            >
-                                Remove
+                            <button className="button button-danger" onClick={() => handleRemove(index)}>
+                                <FontAwesomeIcon icon={faTrash} />
                             </button>
                         </td>
                     </tr>

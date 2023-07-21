@@ -25,36 +25,40 @@
 .intervention-list-container {
     text-align: center;
 }
-.button {
+
+
+.breadcrumb-container {
+    text-align: left;
+}
+
+.breadcrumb {
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+
+
+
+.breadcrumb {
     display: inline-block;
-    padding: 8px 16px;
-    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.breadcrumb-item {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.breadcrumb-item:last-child {
+    margin-right: 0;
+}
+
+.breadcrumb-item.active {
     font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-.button-primary {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.button-primary:hover {
-    background-color: #0056b3;
-}
-
-.button-danger {
-    background-color: #dc3545;
-    color: #fff;
-}
-
-.button-danger:hover {
-    background-color: #c82333;
-}
 
 
 /* Global styles */
@@ -81,86 +85,54 @@ body {
 
 /* Button styles */
 
-.add-button-container {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-bottom: 20px;
+
+.intervention-table .button.button-primary svg path {
+    fill: green;
 }
 
-.add-button-container button {
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.intervention-table .button.button-danger svg path {
+    fill: red;
 }
 
-.add-button-container button:hover {
-    background-color: #c82333;
+.intervention-table .button.button-primary,
+.intervention-table .button.button-danger {
+    background-color: transparent;
 }
-
-/* Modal styles */
 
 .modal-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 2000;
 }
 
 .modal-content {
     background-color: #fff;
     border-radius: 8px;
-    padding: 75px;
-    max-width: 500px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    padding: 60px;
+    width: 90%;
+    height:700px;
+    max-width: 800px;
+
 }
 
-.modal-header {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #333;
-    text-align: center;
-}
-
-.modal-body {
-    margin-bottom: 20px;
-}
 
 .modal-footer {
-    display: flex;
-    justify-content: flex-end;
+    text-align: right;
+    flex-wrap: nowrap;
 }
 
 .modal-footer button {
     margin-left: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 24px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-.modal-footer button:hover {
-    background-color: #0069d9;
-}
+
 
 /* Input and textarea styles */
 
@@ -177,7 +149,7 @@ label {
 input[type="text"],
 textarea {
     width: 100%;
-    padding: 10px;
+    padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
@@ -188,12 +160,19 @@ textarea:focus {
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
+
 input[type="date"],
 textarea {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+input[type="text"]::placeholder,
+input[type="textarea"]::placeholder,
+input[type="date"]::placeholder,
+input[type="select"] ::placeholder{
+    color: #888;
 }
 
 input[type="date"]:focus,
@@ -202,3 +181,4 @@ textarea:focus {
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
+
