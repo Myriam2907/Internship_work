@@ -7,7 +7,7 @@ import { Collapse } from "reactstrap";
 import navdata from "../LayoutMenuData";
 //i18n
 import { withTranslation } from "react-i18next";
-import withRouter from "../Common/withRouter";
+import withRouter from "../../common/withRouter";
 
 const VerticalLayout = (props) => {
   const navData = navdata().props.children;

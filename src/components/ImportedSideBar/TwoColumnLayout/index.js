@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Collapse, Container } from "reactstrap";
-import withRouter from "../Common/withRouter";
+import withRouter from "../../common/withRouter";
 
 import logoSm from "../axia.png";
 //i18n

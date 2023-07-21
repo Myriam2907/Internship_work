@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Col, Collapse, Row } from "reactstrap";
-import withRouter from "../Common/withRouter";
+import withRouter from "../../common/withRouter";
 
 // Import Data
 import navdata from "../LayoutMenuData";
