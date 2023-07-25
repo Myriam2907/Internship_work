@@ -28,31 +28,31 @@ const Sidebar = ({layoutType}) => {
     };
 
     return (<React.Fragment>
-            <div className="app-menu navbar-menu">
-                {layoutType === "horizontal" ? (<div id="scrollbar">
-                        <Container fluid>
-                            <div id="two-column-menu"></div>
-                            <ul className="navbar-nav" id="navbar-nav">
-                                <HorizontalLayout/>
-                            </ul>
-                        </Container>
-                    </div>) : layoutType === "twocolumn" ? (<React.Fragment>
-                        <TwoColumnLayout layoutType={layoutType}/>
-                        <div className="sidebar-background"></div>
-                    </React.Fragment>) : (<React.Fragment>
-                        <SimpleBar id="scrollbar" className="h-100">
-                            <Container fluid>
-                                <div id="two-column-menu"></div>
-                                <ul className="navbar-nav" id="navbar-nav">
-                                    <VerticalLayout layoutType={layoutType}/>
-                                </ul>
-                            </Container>
-                        </SimpleBar>
-                        <div className="sidebar-background"></div>
-                    </React.Fragment>)}
-            </div>
-            <div className="vertical-overlay"></div>
-        </React.Fragment>);
+        <div className="app-menu navbar-menu">
+            {layoutType === "horizontal" ? (<div id="scrollbar">
+                <Container fluid>
+                    <div id="two-column-menu"></div>
+                    <ul className="navbar-nav" id="navbar-nav">
+                        <HorizontalLayout/>
+                    </ul>
+                </Container>
+            </div>) : layoutType === "twocolumn" ? (<React.Fragment>
+                <TwoColumnLayout layoutType={layoutType}/>
+                <div className="sidebar-background"></div>
+            </React.Fragment>) : (<React.Fragment>
+                <SimpleBar id="scrollbar" className="h-100">
+                    <Container fluid>
+                        <div id="two-column-menu"></div>
+                        <ul className="navbar-nav" id="navbar-nav">
+                            <VerticalLayout layoutType={layoutType}/>
+                        </ul>
+                    </Container>
+                </SimpleBar>
+                <div className="sidebar-background"></div>
+            </React.Fragment>)}
+        </div>
+        <div className="vertical-overlay"></div>
+    </React.Fragment>);
 };
 
 export default Sidebar;

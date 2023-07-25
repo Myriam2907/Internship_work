@@ -21,21 +21,17 @@ const Navdata = () => {
         document.body.classList.remove("twocolumn-panel");
     }, []);
 
-    const menuItems = [{id: "clients", label: "Clients", link: "/clients"}, {
-        id: "interventions",
-        label: "Interventions",
-        link: "/interventions"
-    }, {id: "complaints", label: "Complaints", link: "/complaints"}, {
-        id: "projects",
-        label: "Projects",
-        link: "/projects"
+    const menuItems = [{id: "clients", label: "Clients", link: "/#"}, {
+        id: "interventions", label: "Interventions", link: "/#"
+    }, {id: "complaints", label: "Complaints", link: "/#"}, {
+        id: "projects", label: "Projects", link: "/#"
     },];
 
     return (<ul>
-            {menuItems.map((menuItem) => (<li key={menuItem.id}>
-                    <a href={menuItem.link}>{menuItem.label}</a>
-                </li>))}
-        </ul>);
+        {menuItems.map((menuItem) => (<li key={menuItem.id}>
+            <a href={menuItem.link}>{menuItem.label}</a>
+        </li>))}
+    </ul>);
 };
 
 export default Navdata;
